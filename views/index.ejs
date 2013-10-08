@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+<script>
+$(document).on('pageshow','#index',function(){
+
+	$.getJSON('xml2json',
+		function(data){
+			console.log(data);
+
+			var html = '';
+			$.each(data['rss']['channel']['item'],function(key,val){
+
+				html += '<li>';
+				html += '<a href="' + val.link + '">';
+				html += '<img src="#" alt="">';
+				html += '<h2>' + val.title + '</h2>';
+				html += '<p>' + val.description + '</p>';
+				html += '</a>';
+				html += '</li>';
+
+			});
+
+            //listviewリフレッシュ
+            $('[data-role="listview"]').append(html).listview('refresh');
+
+            //本文の画像をサムネイルの画像に置換
+            $('.ui-btn-text').each(function(){
+                $('.ui-li-thumb',this).attr('src',$('.mr10',this).attr('src'));
+            });
+
+            //本文の画像除去
+            $('.mr10').remove();
+		}
+	);
+});
+</script>
+</head>
+<body>
+<div data-role="page" id="index">
+    <div data-role="header">
+        <h1>RSSの取得</h1>
+    </div>
+    <div data-role="content">
+        <ul data-role="listview" data-inset="true">
+        </ul>
+    </div>
+    <div data-role="footer">
+        <h4>Copyright &copy; ナカノヨウスケ</h4>
+    </div>
+</div>
+</body>
+</html>
